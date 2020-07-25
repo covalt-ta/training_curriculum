@@ -15,7 +15,7 @@ class CalendarsController < ApplicationController
   private
 
   def plan_params
-    params.require(:calendars).permit(:date, :plan)
+    params.require(:plan).permit(:date, :plan)
   end
 
   def getWeek
@@ -27,11 +27,13 @@ class CalendarsController < ApplicationController
 
     @week_days = []
 
+    # 今日から7日間の予定を代入
     @plans = Plan.where(date: @todays_date..@todays_date + 7)
 
     7.times do |x|
-      plans = []
+      plans = [] # 今日から一週間のplanカラム（予定）が配列で代入される
       plan = @plans.map do |plan|
+        # planカラム
         plans.push(plan.plan) if plan.date == @todays_date + x
       end
       days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, :plans => plans}
